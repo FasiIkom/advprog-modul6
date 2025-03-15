@@ -1,4 +1,4 @@
-## Reflection on the `handle_connection` Method
+## Reflection on the `handle_connection` Method (1st commit)
 
 The `handle_connection` method is responsible for processing an incoming TCP stream and handling the HTTP request sent by the client. Here's a breakdown of what happens inside this method:
 
@@ -20,3 +20,32 @@ The `handle_connection` method is responsible for processing an incoming TCP str
 - This implementation is a good starting point for building a basic HTTP server, but it can be extended to include features like request parsing, routing, and response generation.
 
 This method demonstrates the foundational steps of handling HTTP requests in a Rust-based server.
+
+## Reflection on the `handle_connection` Method (2nd commit)
+
+In the second iteration of the `handle_connection` method, I have gained a deeper understanding of how HTTP responses are constructed and how the server communicates with the browser. Here are the key points I learned:
+
+1. **Constructing an HTTP Response**:
+   - The response consists of three main parts: the status line, headers, and the body.
+   - The `Content-Length` header is critical as it informs the browser about the size of the response body. Without this header, the browser might not render the content correctly.
+
+2. **Reading and Serving Static Files**:
+   - The method uses `fs::read_to_string` to read the contents of `hello.html`. This demonstrates how to serve static files from the server.
+   - The file's content is included in the response body, making it accessible to the client.
+
+3. **Formatting the Response**:
+   - The `format!` macro is used to dynamically construct the HTTP response string. This approach is simple and effective for small-scale servers.
+
+4. **Error Handling**:
+   - While the method works as intended, it uses `unwrap()` for error handling, which can cause the server to panic if an error occurs (e.g., if `hello.html` is missing). This highlights the need for robust error handling in production systems.
+
+5. **Scalability and Extensibility**:
+   - The current implementation is limited to serving a single static file (`hello.html`). To make the server more useful, it could be extended to handle multiple routes, dynamic content, or different HTTP methods.
+
+### Key Takeaways
+- This iteration of the `handle_connection` method has reinforced the importance of understanding HTTP headers and their role in client-server communication.
+- It has also highlighted the need for better error handling and the potential for extending the server's functionality.
+- Overall, this method serves as a foundational step toward building a more robust and feature-rich HTTP server in Rust.
+
+## Screen capture of HTML returned
+![Commit 2 screen capture](/assets/images/commit2.png)
