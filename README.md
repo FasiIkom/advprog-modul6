@@ -77,3 +77,6 @@ During the development process, I realized that the original implementation of t
    Finally, the `handle_connection` function orchestrates the process by calling the `parse_request` and `build_response` functions, then writing the final response back to the client.
 
 This refactoring not only improves code clarity but also lays the foundation for more robust server features in the future.
+
+### Screen capture of bad request HTML returned
+![Commit 3 screen capture](/assets/images/commit3.png)
