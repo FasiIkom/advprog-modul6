@@ -80,3 +80,17 @@ This refactoring not only improves code clarity but also lays the foundation for
 
 ### Screen capture of bad request HTML returned
 ![Commit 3 screen capture](/assets/images/commit3.png)
+
+## Reflection on Handling Concurrent Requests (4th commit)
+
+When testing the server with two browser windows, one accessing `http://127.0.0.1:7878/sleep` and the other accessing `http://127.0.0.1:7878/`, it becomes evident that the server processes requests sequentially. Here's what happens:
+
+1. **Sequential Processing**:
+   - When the `/sleep` route is accessed, the server pauses for 10 seconds due to the `thread::sleep(Duration::from_secs(10))` call.
+   - During this time, the server cannot handle other incoming requests, causing the second browser window (accessing `/`) to wait until the `/sleep` request is completed.
+
+2. **Impact on User Experience**:
+   - If multiple users access the server simultaneously, the sequential processing will cause delays for all users. This is because the server is currently single-threaded and processes one request at a time.
+
+3. **Why It Works Like This**:
+   - The server uses a single thread to handle all incoming requests. When a request involves a blocking operation (like `thread::sleep`), the thread is occupied and cannot process other requests until the operation is complete.
