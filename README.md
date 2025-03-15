@@ -47,5 +47,33 @@ In the second iteration of the `handle_connection` method, I have gained a deepe
 - It has also highlighted the need for better error handling and the potential for extending the server's functionality.
 - Overall, this method serves as a foundational step toward building a more robust and feature-rich HTTP server in Rust.
 
-## Screen capture of HTML returned
+### Screen capture of HTML returned
 ![Commit 2 screen capture](/assets/images/commit2.png)
+
+## Reflection on Splitting Response and Refactoring (3rd commit)
+
+During the development process, I realized that the original implementation of the `handle_connection` method was handling multiple responsibilities in one function. This includes parsing the HTTP request, determining the appropriate response, reading the static HTML file from disk, and constructing the final HTTP response. By splitting these responsibilities, the code becomes more modular and easier to maintain.
+
+### Why Refactoring is Needed
+
+- **Separation of Concerns:**  
+  By separating the tasks (parsing the request, building the response, reading the file), each function now has a single responsibility. This adheres to the Single Responsibility Principle and promotes cleaner, more readable code.
+
+- **Improved Error Handling:**  
+  The original method used `unwrap()` frequently, which can lead to panics if an error occurs (for example, when a file is missing). Splitting the response building into its own function allows for a more straightforward implementation of error handling and recovery.
+
+- **Scalability and Extensibility:**  
+  With modular functions, it becomes easier to extend the server in the future. For instance, new routes, dynamic responses, or support for additional HTTP methods can be added without overloading a single function with too many tasks.
+
+### How to Split the Response
+
+1. **Parsing the Request:**  
+   A dedicated function (`parse_request`) reads the incoming stream, extracts the HTTP request line, and returns it. This isolates the logic for processing user input.
+
+2. **Building the Response:**  
+   The `build_response` function is responsible for reading the appropriate HTML file based on the request and constructing a formatted HTTP response string. This function handles file IO and ensures that HTTP headers (like `Content-Length`) are set correctly.
+
+3. **Handling Connection:**  
+   Finally, the `handle_connection` function orchestrates the process by calling the `parse_request` and `build_response` functions, then writing the final response back to the client.
+
+This refactoring not only improves code clarity but also lays the foundation for more robust server features in the future.
