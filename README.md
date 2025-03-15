@@ -94,3 +94,24 @@ When testing the server with two browser windows, one accessing `http://127.0.0.
 
 3. **Why It Works Like This**:
    - The server uses a single thread to handle all incoming requests. When a request involves a blocking operation (like `thread::sleep`), the thread is occupied and cannot process other requests until the operation is complete.
+
+## Reflection on Multithreaded Server Using ThreadPool (5th commit)
+
+After observing the limitations of a single-threaded server, we implemented a multithreaded server using a `ThreadPool`. This approach allows the server to handle multiple requests concurrently, significantly improving its responsiveness and scalability.
+
+### Key Insights
+
+1. **How ThreadPool Works**:
+   - A `ThreadPool` initializes a fixed number of worker threads that wait for jobs.
+   - When a new connection arrives, the server submits a job (the connection handling) to the pool. Each worker thread picks up a job from the queue and executes it.
+   - This ensures that multiple requests can be processed simultaneously, without one blocking the others.
+
+2. **Concurrency and Efficiency**:
+   - By using a `ThreadPool`, the server can handle multiple requests concurrently, even if one request involves a blocking operation like `thread::sleep`.
+   - Threads are reused for multiple jobs, avoiding the overhead of creating and destroying threads for each request.
+
+3. **Improved User Experience**:
+   - With a multithreaded server, users no longer experience delays caused by other requests. For example, accessing `/sleep` in one browser window no longer blocks access to `/` in another window.
+
+4. **Resource Management**:
+   - The `ThreadPool` efficiently manages system resources by limiting the number of threads to a fixed size. This prevents the server from being overwhelmed by too many simultaneous requests.
