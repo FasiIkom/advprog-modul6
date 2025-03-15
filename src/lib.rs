@@ -32,6 +32,10 @@ impl ThreadPool {
         let job = Box::new(f); // Create a Job by boxing the closure
         self.sender.send(job).unwrap(); // Send the Job through the channel
     }
+    
+    pub fn build_thread_pool(size: usize) -> ThreadPool {
+        ThreadPool::new(size)
+    }
 }
 
 struct Worker {

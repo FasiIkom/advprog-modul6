@@ -1,3 +1,5 @@
+# advprog-modul6
+
 ## Reflection on the `handle_connection` Method (1st commit)
 
 The `handle_connection` method is responsible for processing an incoming TCP stream and handling the HTTP request sent by the client. Here's a breakdown of what happens inside this method:
@@ -115,3 +117,18 @@ After observing the limitations of a single-threaded server, we implemented a mu
 
 4. **Resource Management**:
    - The `ThreadPool` efficiently manages system resources by limiting the number of threads to a fixed size. This prevents the server from being overwhelmed by too many simultaneous requests.
+
+## Reflection on Additional Function Build (Bonus Commit)
+
+1. **Simplified Initialization**
+
+- Instead of calling `ThreadPool::new(size)`, users can call `ThreadPool::build(size)`, which makes the intent clear and might feel more intuitive in certain contexts.
+
+2. **Comparison with `new`**
+
+- Internally, `build` delegates to the `new` function. As a result, both functions create a thread pool with a specified number of threads. However, `build` can help clarify usage or future-proof API by separating construction logic from the lower-level details in `new`.
+
+3. **Maintaining Consistency**
+
+- Including both `build` and `new` in the codebase maintains backward compatibility in code that already relies on `new`, while offering a potentially clearer entry point for new users.
+
